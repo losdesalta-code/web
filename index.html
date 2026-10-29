@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Los de Salta. Folklore argentino, música en vivo y contrataciones para festivales, peñas y eventos.">
+  <meta name="theme-color" content="#090909">
+  <title>Los de Salta | Folklore argentino</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Yellowtail&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --negro: #090909;
+      --negro-suave: #121212;
+      --bordo: #7d1019;
+      --dorado: #c7a568;
+      --dorado-claro: #e8d4a7;
+      --blanco: #f7f3ec;
+      --gris: #bcb7af;
+      --ancho: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      margin: 0;
+      background: var(--negro);
+      color: var(--blanco);
+      font-family: "Montserrat", Arial, sans-serif;
+      line-height: 1.7;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .contenedor { width: min(92%, var(--ancho)); margin-inline: auto; }
+
+    .barra {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(8, 8, 8, .94);
+      border-bottom: 1px solid rgba(199, 165, 104, .28);
+      backdrop-filter: blur(12px);
+    }
+    .barra-interior {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .marca { display: flex; align-items: center; gap: 12px; min-width: 0; cursor: default; }
+    .marca-logo { width: 145px; height: 75px; object-fit: contain; flex: 0 0 auto; }
+    .marca-identidad { display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 0; }
+    .marca-letra { width: clamp(155px, calc(17vw + 8px), 225px); height: auto; object-fit: contain; }
+    
+    .navegacion { display: flex; align-items: center; gap: 25px; }
+    .navegacion a {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #eee8df;
+      transition: color .2s ease;
+    }
+    .navegacion a:hover { color: var(--dorado-claro); }
+    .navegacion .nav-contratar {
+      border: 1px solid var(--dorado);
+      padding: 10px 15px;
+      color: var(--dorado-claro);
+    }
+    .menu-toggle {
+      display: none;
+      color: var(--dorado-claro);
+      background: transparent;
+      border: 1px solid rgba(199,165,104,.6);
+      padding: 8px 12px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    /* Portada ajustada para bajar el logo, textos y botones y despejar los rostros */
+    .portada {
+      min-height: min(720px, calc(100svh - 82px));
+      display: grid;
+      align-items: end;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background: #170b0d;
+    }
+    .portada::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background-image: url("Foto_cortina.jpg");
+      background-position: center 28%;
+      background-size: cover;
+      transform: scale(1.01);
+    }
+    .portada::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.78), rgba(0,0,0,.2) 75%),
+        linear-gradient(0deg, rgba(0,0,0,.96), rgba(0,0,0,.06) 72%);
+    }
+    .portada-contenido { padding: 55px 0 55px; width: 100%; text-align: left; }
+    .sobretitulo {
+      color: var(--dorado-claro);
+      text-transform: uppercase;
+      font-size: .75rem;
+      letter-spacing: .28em;
+      font-weight: 600;
+    }
+    
+    .portada-logo-letra { 
+      width: min(100%, 650px); 
+      margin: 85px 0 14px 0; 
+      line-height: 0;
+      text-align: left;
+    }
+    .portada-logo-letra img { width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 4px 18px rgba(0,0,0,.55)); margin-left: 0; }
+    
+    .portada p { max-width: 540px; color: #eee6dc; font-size: clamp(.92rem, 1.8vw, 1.08rem); text-align: left; margin-bottom: 18px; }
+    
+    .acciones-fila {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 22px;
+      width: 100%;
+    }
+    .acciones { display: flex; flex-wrap: wrap; gap: 13px; justify-content: flex-start; }
+    .boton {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 21px;
+      border: 1px solid var(--dorado);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .boton:hover { transform: translateY(-2px); }
+    .boton-principal { background: var(--dorado); color: #17120b; }
+    .boton-secundario { background: rgba(0,0,0,.2); color: var(--blanco); }
+
+    .lema-portada-inferior { 
+      text-align: right;
+      white-space: nowrap;
+      margin-left: auto;
+    }
+
+    .whatsapp-flotante {
+      position: absolute;
+      right: 6%;
+      top: 68%;
+      transform: translateY(-50%);
+      z-index: 30;
+      width: 56px;
+      height: 56px;
+      background-color: #25d366;
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    .whatsapp-flotante:hover {
+      transform: translateY(-50%) scale(1.1);
+      background-color: #20ba5a;
+      color: #ffffff;
+    }
+
+    section { padding: 94px 0; }
+    .seccion-cabecera { max-width: 720px; margin: 0 auto 24px; text-align: center; }
+    .seccion-cabecera .sobretitulo { display: block; margin-bottom: 8px; }
+    h2 {
+      margin-bottom: 10px;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(2.3rem, 4.5vw, 3.8rem);
+    }
+    h2 em { color: var(--dorado-claro); font-weight: 400; }
+    .seccion-cabecera p { color: var(--gris); margin: 0; font-size: .95rem; }
+    .presentacion { background: var(--negro-suave); }
+    .presentacion-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: clamp(32px, 7vw, 90px);
+      align-items: center;
+    }
+    .logo-panel {
+      min-height: 320px;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      padding: 0;
+      background: #050505;
+      border: 1px solid rgba(199,165,104,.45);
+      box-shadow: 0 12px 32px rgba(0,0,0,.28);
+    }
+    .grupo-video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 320px;
+      object-fit: cover;
+      background: #050505;
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      filter: blur(0);
+      transition: opacity .55s ease, transform .55s ease, filter .55s ease;
+    }
+    .grupo-video.transicion-fade { opacity: 0; }
+    .grupo-video.transicion-izquierda { opacity: 0; transform: translateX(-28px) scale(.98); }
+    .grupo-video.transicion-derecha { opacity: 0; transform: translateX(28px) scale(.98); }
+    .grupo-video.transicion-zoom { opacity: 0; transform: scale(1.06); filter: blur(4px); }
+
+    .presentacion-texto h2 { margin-bottom: 20px; }
+    .presentacion-texto p { color: var(--gris); }
+    .linea-dorada { width: 78px; height: 2px; background: var(--dorado); margin: 24px 0; }
+
+    .historia {
+      padding: 45px 0 55px !important;
+      background: linear-gradient(135deg, rgba(125,16,25,.2), transparent 55%), #0d0d0d;
+      border-top: 1px solid rgba(199,165,104,.18);
+      border-bottom: 1px solid rgba(199,165,104,.18);
+    }
+    .historia-contenido {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: clamp(28px, 6vw, 76px);
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .historia-destacada {
+      min-height: 260px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      border: 1px solid rgba(199,165,104,.32);
+      background: radial-gradient(ellipse at 20% 15%, rgba(125,16,25,.45), transparent 60%), #080808;
+    }
+    .historia-foto {
+      padding: 0;
+      min-height: 0;
+      aspect-ratio: 4 / 3;
+      display: block;
+      overflow: hidden;
+      border: 1px solid rgba(199,165,104,.55);
+      background: #080808;
+    }
+    .historia-foto img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .historia-texto h3 { margin-bottom: 12px; font: 500 1.75rem/1.15 "Cormorant Garamond", Georgia, serif; }
+    .historia-texto p { color: var(--gris); font-size: .92rem; margin-bottom: 18px; }
+
+    .musica { background: #0b0b0b; }
+    .tarjetas {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .tarjeta {
+      min-height: 235px;
+      padding: 28px;
+      border: 1px solid rgba(199,165,104,.25);
+      background: linear-gradient(145deg, rgba(125,16,25,.2), transparent 62%), #111;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tarjeta .numero { color: var(--dorado); font-size: .8rem; letter-spacing: .16em; }
+    .tarjeta h3 { font-family: "Cormorant Garamond", Georgia, serif; font-size: 2rem; margin: 22px 0 10px; font-weight: 500; }
+    .tarjeta p { color: var(--gris); font-size: .9rem; margin: 0 0 20px; }
+    .enlace-texto { color: var(--dorado-claro); font-size: .76rem; text-transform: uppercase; font-weight: 700; letter-spacing: .1em; display: inline-block; transition: transform .2s ease; }
+    .enlace-texto:hover { transform: translateX(3px); }
+
+    .escenario {
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(125,16,25,.35), transparent 45%),
+        radial-gradient(ellipse at 80% 0%, rgba(199,165,104,.12), transparent 42%),
+        #080808;
+    }
+    .escenario .frase {
+      max-width: 900px;
+      margin: 0 auto 30px;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-style: italic;
+      color: var(--dorado-claro);
+    }
+    .escenario p { max-width: 700px; margin: 0 auto; color: var(--gris); }
+
+    .contrataciones {
+      background: linear-gradient(130deg, rgba(125,16,25,.35), transparent 65%), #111;
+      border-top: 1px solid rgba(199,165,104,.22);
+      border-bottom: 1px solid rgba(199,165,104,.22);
+      text-align: center;
+    }
+    .contrataciones p { max-width: 660px; margin: 0 auto 26px; color: var(--gris); }
+
+    .social-section {
+      margin: 38px auto 0;
+      max-width: 900px;
+      padding: 30px clamp(18px, 4vw, 42px);
+      border: 1px solid rgba(199,165,104,.35);
+      background: linear-gradient(135deg, rgba(125,16,25,.18), transparent 65%), #101010;
+    }
+    .social-title {
+      margin-bottom: 22px;
+      color: var(--dorado-claro);
+      text-align: center;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+    }
+    .social-title span { color: var(--gris); font-style: italic; }
+    .social-content-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+    .social-links-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+    .social-item {
+      min-width: 145px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 1px solid rgba(199,165,104,.3);
+      color: var(--blanco);
+      background: rgba(255,255,255,.025);
+      transition: border-color .2s ease, transform .2s ease, background .2s ease;
+    }
+    .social-item:hover {
+      border-color: var(--dorado);
+      background: rgba(199,165,104,.08);
+      transform: translateY(-2px);
+    }
+    .social-icon { font-size: 1.25rem; }
+    .icon-whatsapp { color: #25D366; }
+    .icon-instagram { color: #E6688A; }
+    .icon-facebook { color: #5896F8; }
+    .icon-spotify { color: #1ED760; }
+    .icon-youtube { color: #FF4B4B; }
+
+    .datos-contacto {
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+      margin-top: 28px;
+      color: var(--gris);
+      font-size: .94rem;
+    }
+    .dato-contacto {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+    .dato-contacto i { width: 20px; color: var(--dorado-claro); text-align: center; }
+    .dato-contacto a:hover { color: var(--dorado-claro); }
+
+    footer { padding: 35px 0; background: #050505; }
+    .pie-interior { display: flex; align-items: center; justify-content: space-between; gap: 22px; }
+    .pie-marca { display: flex; align-items: center; gap: 16px; }
+    .pie-marca img { width: 125px; height: 70px; object-fit: contain; }
+    .pie-marca span { color: var(--gris); font-size: .8rem; }
+    .volver { color: var(--dorado-claro); font-size: .8rem; }
+
+    @media (max-width: 900px) {
+      .navegacion { gap: 14px; }
+      .navegacion a { font-size: .65rem; }
+      .marca-logo { width: 120px; height: 62px; }
+      .marca-letra { width: 178px; }
+      .presentacion-grid { grid-template-columns: 1fr; }
+      .historia-contenido { grid-template-columns: 1fr; }
+      .logo-panel { min-height: 250px; aspect-ratio: 16 / 9; }
+      .grupo-video { min-height: 250px; }
+      .tarjetas { grid-template-columns: 1fr 1fr; }
+      .acciones-fila { flex-direction: column; align-items: flex-start; }
+      .lema-portada-inferior { margin-left: 0; text-align: left; }
+    }
+    @media (max-width: 680px) {
+      .barra-interior { min-height: 72px; }
+      .marca-logo { width: 95px; height: 50px; }
+      .marca-letra { width: 145px; }
+      .menu-toggle { display: block; }
+      .navegacion {
+        display: none;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        padding: 20px 4% 25px;
+        background: rgba(8,8,8,.98);
+        border-bottom: 1px solid rgba(199,165,104,.3);
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .navegacion.abierto { display: flex; }
+      .navegacion a { padding: 9px 0; font-size: .76rem; }
+      .navegacion .nav-contratar { text-align: center; padding: 12px; }
+      .portada { min-height: 680px; min-height: min(720px, calc(100svh - 72px)); }
+      .tarjetas { grid-template-columns: 1fr; }
+      .pie-interior { flex-direction: column; text-align: center; }
+      .pie-marca { flex-direction: column; gap: 8px; }
+      .whatsapp-flotante { right: 5%; width: 48px; height: 48px; font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="barra">
+    <div class="contenedor barra-interior">
+      <div class="marca">
+        <a href="index.html" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
+          <img class="marca-logo" src="LOGO OFICIAL.png" alt="Logo oficial de Los de Salta con guitarra">
+          <span class="marca-identidad">
+            <img class="marca-letra" src="los-de-salta-letra.png" alt="Los de Salta">
+          </span>
+        </a>
+      </div>
+
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navegacion">Menú ☰</button>
+
+      <nav class="navegacion" id="navegacion" aria-label="Navegación principal">
+        <a href="#grupo">El grupo</a>
+        <a href="#historia">Nuestra historia</a>
+        <a href="#musica">Música</a>
+        <a href="#espectaculo">Espectáculo</a>
+        <a class="nav-contratar" href="#contrataciones">Contrataciones</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="portada" id="inicio" aria-label="Presentación de Los de Salta">
+      <div class="contenedor" style="position: relative;">
+        <a href="https://wa.me/5491136796934?text=Hola,%20quisiera%20hacer%20una%20consulta" target="_blank" rel="noopener noreferrer" class="whatsapp-flotante" aria-label="Chatear por WhatsApp">
+          <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+        </a>
+
+        <div class="portada-contenido">
+          <h1 class="portada-logo-letra"><img src="los-de-salta-letra.png" alt="Los de Salta"></h1>
+          
+          <div class="portada-bloque-inferior">
+            <p>La fuerza de nuestras raíces, la emoción de cada canción y el encuentro de la música folklórica con su gente.</p>
+            
+            <div class="acciones-fila">
+              <div class="acciones">
+                <a class="boton boton-principal" href="lanzamiento.html">DESCUBRIR NUESTRA MÚSICA</a>
+                <a class="boton boton-secundario" href="#contrataciones">CONTRATAR AL GRUPO</a>
+              </div>
+              <span class="sobretitulo lema-portada-inferior">FOLKLORE ARGENTINO · MÚSICA EN VIVO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="presentacion" id="grupo">
+      <div class="contenedor presentacion-grid">
+        <div class="logo-panel">
+          <video
+            id="videoGrupo"
+            class="grupo-video"
+            playsinline
+            controls
+            preload="auto"
+            aria-label="Videos en vivo de Los de Salta">
+            <source src="videos/Los%20de%20Salta%20en%20vivo%20-%20Se%20Siente%20Argentina.mp4" type="video/mp4">
+            Tu navegador no puede reproducir este video.
+          </video>
+        </div>
+        <div class="presentacion-texto">
+          <span class="sobretitulo">Nuestra identidad</span>
+          <h2>Una voz que nace de <em>nuestras raíces</em></h2>
+          <div class="linea-dorada"></div>
+          <p>Somos Los de Salta. Llevamos el folklore argentino al escenario con pasión, identidad y respeto por la música que nos representa.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="historia" id="historia">
+      <div class="contenedor">
+        <div class="seccion-cabecera" style="text-align: center;">
+          <h2 style="text-align: center;">Nuestra <em>historia</em></h2>
+          <p style="text-align: center;">La música, las raíces y el encuentro con el público forman parte del camino de Los de Salta.</p>
+        </div>
+        <div class="historia-contenido">
+          <div class="historia-destacada historia-foto">
+            <img src="Fotos/Foto14.jpeg" alt="Los de Salta, fotografía histórica del conjunto">
+          </div>
+          <div class="historia-texto">
+            <h3>Una trayectoria que hace historia</h3>
+            <p>Con más de seis décadas de trayectoria ininterrumpida, Los de Salta es una de las agrupaciones más emblemáticas y respetadas de la música folklórica argentina.</p>
+            <a class="boton boton-principal" href="Nuestrahistoria.html">Continuar con la historia</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="musica" id="musica">
+      <div class="contenedor">
+        <div class="seccion-cabecera">
+          <span class="sobretitulo">Escuchá y compartí</span>
+          <h2>La música es <em>el encuentro</em></h2>
+        </div>
+        <div class="tarjetas">
+          <article class="tarjeta">
+            <div>
+              <span class="numero">01 / AUDIO</span>
+              <h3>Nuestras canciones</h3>
+            </div>
+            <a class="enlace-texto" href="lanzamiento.html">LANZAMIENTO ↗</a>
+          </article>
+          <article class="tarjeta">
+            <div>
+              <span class="numero">02 / VIDEO</span>
+              <h3>En vivo</h3>
+            </div>
+            <a class="enlace-texto" href="video.html">VER VIDEOS ↗</a>
+          </article>
+          <article class="tarjeta">
+            <div>
+              <span class="numero">03 / GALERÍA</span>
+              <h3>Detrás de cada canción</h3>
+            </div>
+            <a class="enlace-texto" href="#contacto">AGREGAR FOTOGRAFÍAS ↗</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="escenario" id="espectaculo">
+      <div class="contenedor">
+        <span class="sobretitulo">Tradición que sigue viva</span>
+        <p class="frase">“El folklore se siente, se comparte y se lleva en el corazón.”</p>
+      </div>
+    </section>
+
+    <section class="contrataciones" id="contrataciones">
+      <div class="contenedor">
+        <span class="sobretitulo">Llevanos a tu escenario</span>
+        <h2>Hablemos de <em>tu próximo evento</em></h2>
+        <p>Consultá por fechas disponibles y contrataciones para festivales, peñas, eventos privados y espectáculos.</p>
+        <div class="acciones" style="justify-content:center">
+          <a class="boton boton-principal" href="contrataciones.html">Consultar contratación</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" style="padding: 58px 0 70px; background:#090909;">
+      <div class="contenedor">
+        <div class="seccion-cabecera" style="margin-bottom:0">
+          <span class="sobretitulo">Contacto</span>
+          <h2>Conectate con <em>Los de Salta</em></h2>
+        </div>
+
+        <div class="social-section">
+          <div class="social-title">REDES <span>y</span> PLATAFORMAS</div>
+          <div class="social-content-wrapper">
+            <div class="social-links-list">
+              <a href="https://wa.me/5491136796934?text=Hola,%20quisiera%20hacer%20una%20consulta" target="_blank" rel="noopener noreferrer" class="social-item whatsapp"><i class="fa-brands fa-whatsapp social-icon icon-whatsapp"></i><span>WhatsApp</span></a>
+              <a href="https://www.instagram.com/losdesalta.oficial/" target="_blank" rel="noopener noreferrer" class="social-item instagram"><i class="fa-brands fa-instagram social-icon icon-instagram"></i><span>Instagram</span></a>
+              <a href="https://www.facebook.com/profile.php?id=100063510043313" target="_blank" rel="noopener noreferrer" class="social-item facebook"><i class="fa-brands fa-facebook social-icon icon-facebook"></i><span>Facebook</span></a>
+              <a href="https://open.spotify.com/intl-es/album/2zIjcQLrL3OpoEn9FDXJQQ" target="_blank" rel="noopener noreferrer" class="social-item spotify"><i class="fa-brands fa-spotify social-icon icon-spotify"></i><span>Spotify</span></a>
+              <a href="https://www.youtube.com/watch?v=fp4r4y5LBh0&amp;list=OLAK5uy_mvYguTiAC8s-7xl0cG03uvpIZu50KWNiU&amp;index=2" target="_blank" rel="noopener noreferrer" class="social-item youtube"><i class="fa-brands fa-youtube social-icon icon-youtube"></i><span>YouTube</span></a>
+            </div>
+          </div>
+
+          <div class="datos-contacto">
+            <div class="dato-contacto"><i class="fa-solid fa-phone" aria-hidden="true"></i><span>+54 9 11 5347-7116 / +54 9 11 3679-6934</span></div>
+            <div class="dato-contacto"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>Pilar, Buenos Aires, Argentina</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="contenedor pie-interior">
+      <div class="pie-marca">
+        <img src="LOGO OFICIAL.png" alt="Logo de Los de Salta">
+        <span>© <span id="anio"></span> Los de Salta · Folklore argentino</span>
+      </div>
+      <a class="volver" href="#inicio">Volver arriba ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const navegacion = document.getElementById("navegacion");
+
+    menuToggle.addEventListener("click", () => {
+      const abierto = navegacion.classList.toggle("abierto");
+      menuToggle.setAttribute("aria-expanded", String(abierto));
+      menuToggle.textContent = abierto ? "Cerrar ✕" : "Menú ☰";
+    });
+
+    document.getElementById("anio").textContent = new Date().getFullYear();
+
+    const videoGrupo = document.getElementById("videoGrupo");
+    const videosGrupo = [
+      "videos/Los%20de%20Salta%20en%20vivo%20-%20Se%20Siente%20Argentina.mp4",
+      "videos/Los%20de%20Salta%20en%20vivo%20-%20Se%20Siente%20Argentina1.mp4",
+      "videos/Los%20de%20Salta%20en%20vivo%20-%20Se%20Siente%20Argentina2.mp4",
+      "videos/Los%20de%20Salta%20en%20vivo%20-%20Se%20Siente%20Argentina3.mp4"
+    ];
+    let indiceVideoGrupo = 0;
+    let cambioVideoEnCurso = false;
+    let reproduciendoActivo = false;
+
+    const efectosTransicion = [
+      "transicion-fade",
+      "transicion-izquierda",
+      "transicion-derecha",
+      "transicion-zoom"
+    ];
+    let ultimoEfecto = "";
+
+    function reproducirVideoGrupo() {
+      if (!reproduciendoActivo) return;
+      videoGrupo.volume = 0.85;
+      const intento = videoGrupo.play();
+      if (intento && typeof intento.catch === "function") {
+        intento.catch(() => {
+          videoGrupo.muted = true;
+          videoGrupo.play().catch(() => {});
+        });
+      }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          reproduciendoActivo = true;
+          reproducirVideoGrupo();
+        } else {
+          reproduciendoActivo = false;
+          videoGrupo.pause();
+        }
+      });
+    }, { threshold: 0.3 });
+
+    observer.observe(document.getElementById("grupo"));
+
+    videoGrupo.addEventListener("ended", () => {
+      if (!reproduciendoActivo || cambioVideoEnCurso) return;
+      cambioVideoEnCurso = true;
+
+      const opciones = efectosTransicion.filter((efecto) => efecto !== ultimoEfecto);
+      const efecto = opciones[Math.floor(Math.random() * opciones.length)];
+      ultimoEfecto = efecto;
+      videoGrupo.classList.add(efecto);
+
+      window.setTimeout(() => {
+        indiceVideoGrupo = (indiceVideoGrupo + 1) % videosGrupo.length;
+        videoGrupo.src = videosGrupo[indiceVideoGrupo];
+        videoGrupo.load();
+      }, 550);
+    });
+
+    videoGrupo.addEventListener("loadeddata", () => {
+      if (!cambioVideoEnCurso) return;
+      requestAnimationFrame(() => {
+        efectosTransicion.forEach((efecto) => videoGrupo.classList.remove(efecto));
+        reproducirVideoGrupo();
+        cambioVideoEnCurso = false;
+      });
+    });
+
+    window.addEventListener("pagehide", () => {
+      videoGrupo.pause();
+    });
+  </script>
+</body>
+</html>

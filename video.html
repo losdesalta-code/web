@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Videos en vivo y presentaciones de Los de Salta.">
+  <meta name="theme-color" content="#090909">
+  <title>Videos | Los de Salta — Folklore argentino</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --negro: #090909;
+      --negro-suave: #121212;
+      --dorado: #c7a568;
+      --dorado-claro: #e8d4a7;
+      --blanco: #f7f3ec;
+      --gris: #bcb7af;
+      --ancho: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--negro);
+      color: var(--blanco);
+      font-family: "Montserrat", Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    .contenedor { width: min(94%, var(--ancho)); margin-inline: auto; }
+
+    /* Barra de navegación superior (fija y por encima del fondo) */
+    .barra {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(8, 8, 8, .95);
+      border-bottom: 1px solid rgba(199, 165, 104, .35);
+      backdrop-filter: blur(12px);
+    }
+    .barra-interior {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .marca { display: flex; align-items: center; gap: 12px; min-width: 0; cursor: default; }
+    .marca-logo { width: 145px; height: 75px; object-fit: contain; flex: 0 0 auto; }
+    .marca-identidad { display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 0; }
+    .marca-letra { width: clamp(155px, calc(17vw + 8px), 225px); height: auto; object-fit: contain; }
+    
+    .navegacion { display: flex; align-items: center; gap: clamp(12px, 2vw, 25px); }
+    .navegacion a {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: #eee8df;
+      transition: color .2s ease;
+    }
+    .navegacion a:hover { color: var(--dorado-claro); }
+    .navegacion .nav-contratar {
+      border: 1px solid var(--dorado);
+      padding: 10px 15px;
+      color: var(--dorado-claro);
+    }
+    .menu-toggle {
+      display: none;
+      color: var(--dorado-claro);
+      background: transparent;
+      border: 1px solid rgba(199,165,104,.6);
+      padding: 8px 12px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    /* Contenedor principal con la foto de fondo debajo del menú */
+    .contenido-principal-fondo {
+      position: relative;
+      background-image: url("fotos/Foto8.jpeg");
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    .contenido-principal-fondo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 5, 5, 0.88);
+      backdrop-filter: blur(6px);
+      z-index: 0;
+    }
+
+    /* Asegurar que el contenido esté por encima de la capa oscura */
+    .contenido-principal-fondo > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Cabecera de la sección */
+    .intro {
+      padding: 50px 0 30px;
+      text-align: center;
+    }
+    .sobretitulo {
+      display: block;
+      color: var(--dorado-claro);
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      margin: 0 0 10px;
+    }
+    h1 em { color: var(--dorado-claro); font-weight: 400; }
+    .intro p { color: var(--gris); max-width: 700px; margin: 0 auto; font-size: .95rem; }
+
+    /* Cuadrícula de 10 rectángulos (5 izq, 5 der) */
+    .seccion-videos {
+      padding: 20px 0 70px;
+    }
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+    }
+    .video-tarjeta {
+      background: #111111;
+      border: 1px solid rgba(199, 165, 104, 0.35);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+    .video-tarjeta:hover {
+      border-color: var(--dorado);
+      transform: translateY(-3px);
+    }
+    .video-contenedor {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000000;
+    }
+    .video-contenedor video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .video-info {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, #121212 0%, #0a0a0a 100%);
+    }
+    .video-titulo {
+      font-size: .9rem;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+      letter-spacing: .03em;
+    }
+    .video-badge {
+      font-size: .7rem;
+      color: var(--dorado-claro);
+      border: 1px solid rgba(199, 165, 104, 0.4);
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      white-space: nowrap;
+    }
+
+    /* Pie de página */
+    footer {
+      border-top: 1px solid rgba(199, 165, 104, 0.25);
+      padding: 25px 0;
+      background: rgba(5, 5, 5, 0.95);
+    }
+    .pie-interior {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+    .pie-marca {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .pie-marca img {
+      width: 125px;
+      height: 70px;
+      object-fit: contain;
+    }
+    .pie-marca span {
+      color: var(--gris);
+      font-size: .8rem;
+    }
+    .volver {
+      color: var(--dorado-claro);
+      font-size: .8rem;
+    }
+
+    /* Responsividad para móviles y tablets */
+    @media (max-width: 900px) {
+      .videos-grid { grid-template-columns: 1fr; gap: 20px; }
+      .navegacion { gap: 14px; }
+      .navegacion a { font-size: .65rem; }
+      .marca-logo { width: 120px; height: 62px; }
+      .marca-letra { width: 178px; }
+    }
+    @media (max-width: 680px) {
+      .barra-interior { min-height: 72px; }
+      .marca-logo { width: 95px; height: 50px; }
+      .marca-letra { width: 145px; }
+      .menu-toggle { display: block; }
+      .navegacion {
+        display: none;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        padding: 20px 4% 25px;
+        background: rgba(8, 8, 8, .98);
+        border-bottom: 1px solid rgba(199,165,104,.3);
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .navegacion.abierto { display: flex; }
+      .navegacion a { padding: 9px 0; font-size: .76rem; }
+      .navegacion .nav-contratar { text-align: center; padding: 12px; }
+      .pie-interior { flex-direction: column; text-align: center; }
+      .pie-marca { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de navegación superior (queda arriba limpia, sin foto de fondo detrás) -->
+  <header class="barra" id="inicio">
+    <div class="contenedor barra-interior">
+      <div class="marca">
+        <img class="marca-logo" src="LOGO OFICIAL.png" alt="Logo oficial de Los de Salta">
+        <span class="marca-identidad">
+          <img class="marca-letra" src="los-de-salta-letra.png" alt="Los de Salta">
+        </span>
+      </div>
+
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navegacion">Menú ☰</button>
+
+      <nav class="navegacion" id="navegacion" aria-label="Navegación principal">
+        <a href="index.html#grupo">El grupo</a>
+        <a href="index.html#historia">Nuestra historia</a>
+        <a href="index.html#musica">Música</a>
+        <a href="index.html#espectaculo">Espectáculo</a>
+        <a class="nav-contratar" href="index.html#contrataciones">Contrataciones</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Contenedor general que abarca desde debajo del menú con la foto de fondo -->
+  <div class="contenido-principal-fondo">
+    <main>
+      <!-- Título de la página de videos -->
+      <section class="intro">
+        <div class="contenedor">
+          <span class="sobretitulo">Archivo audiovisual</span>
+          <h1>Videos en <em>vivo</em></h1>
+          <p>Disfrutá de las presentaciones, actuaciones y momentos destacados de Los de Salta en diferentes escenarios.</p>
+        </div>
+      </section>
+
+      <!-- Cuadrícula con los 10 rectángulos de videos (5 izquierda, 5 derecha) -->
+      <section class="contenedor seccion-videos">
+        <div class="videos-grid">
+          
+          <!-- Rectángulo 1 (Izquierda) -->
+          <article class="video-tarjeta">
+            <div class="video-contenedor">
+              <video class="video-reproductor" controls preload="metadata">
+                <source src="Videos/Los de Salta en vivo - Se Siente Argentina.mp4" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+              </video>
+            </div>
+            <div class="video-info">
+              <h2 class="video-titulo">1. Se Siente Argentina (En Vivo)</h2>
+              <span class="video-badge">Video 01</span>
+            </div>
+          </article>
+
+          <!-- Rectángulo 2 (Derecha) -->
+          <article class="video-tarjeta">
+            <div class="video-contenedor">
+              <video class="video-reproductor" controls preload="metadata">
+                <source src="Videos/Popurri.mp4" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+              </video>
+            </div>
+            <div class="video-info">
+              <h2 class="video-titulo">2. Popurrí de Zambas y Chacareras</h2>
+              <span class="video-badge">Video 02</span>
+            </div>
+          </article>
+
+          <!-- Rectángulo 3 (Izquierda) -->
+          <article class="video-tarjeta">
+            <div class="video-contenedor">
+              <video class="video-reproductor" controls preload="metadata">
+                <source src="videos/Video_Japón.mp4" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+              </video>
+            </div>
+            <div class="video-info">
+              <h2 class="video-titulo">3. Presentación Especial Japón</h2>
+              <span class="video-badge">Video 03</span>
+            </div>
+          </article>
+
+          <!-- Rectángulo 4 (Derecha) -->
+          <article class="video-tarjeta">
+            <div class="video-contenedor">
+              <video class="video-reproductor" controls preload="metadata">
+                <source src="Videos/Después de tantos años (Video oficial).mp4" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+              </video>
+            </div>
+            <div class="video-info">
+              <h2 class="video-titulo">4. Después de tantos años (Video oficial)</h2>
+              <span class="video-badge">Video 04</span>
+            </div>
+          </article>
+
+          <!-- Rectángulo 5 (Izquierda) -->
+          <article class="video-tarjeta">
+            <div class="video-contenedor">
+              <video class="video-reproductor" controls preload="metadata">
+                <source src="videos/Los de Salta - Carta a un cuyano (video oficial).mp4" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+              </video>
+            </div>
+            <div class="video-info">
+              <h2 class="video-titulo">5. Carta a un cuyano (video oficial)</h2>
+              <span class="video-badge">Video 05</span>
+            </div>
+          </article>
+
+          <!-- Rectángulo 6 (Derecha) -->
+          <article class="video-tarjeta">
+            <div class="video-contenedor">
+              <video class="video-reproductor" controls preload="metadata">
+                <source src="Videos/San Luis_VillaMercedes.mp4" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+              </video>
+            </div>
+            <div class="video-info">
+              <h2 class="video-titulo">6. San Luis VillaMercedes</h2>
+              <span class="video-badge">Video 06</span>
+            </div>
+          </article>
+
+          <!-- Rectángulo 7 -->
+          <article class="video-tarjeta">
+            <div class="video-contenedor" style="display:flex; align-items:center; justify-content:center; background:#181818; color:#777; font-size:.85rem; text-align:center; padding:20px;">
+              <span>Próximamente / Espacio para Video 07</span>
+            </div>
+            <div class="video-info">
+              <h2 class="video-titulo">7. Próximo Estreno</h2>
+              <span class="video-badge">Próximamente</span>
+            </div>
+          </article>
+
+          <!-- Rectángulo 8 -->
+          <article class="video-tarjeta">
+            <div class="video-contenedor" style="display:flex; align-items:center; justify-content:center; background:#181818; color:#777; font-size:.85rem; text-align:center; padding:20px;">
+              <span>Próximamente / Espacio para Video 08</span>
+            </div>
+            <div class="video-info">
+              <h2 class="video-titulo">8. Próximo Estreno</h2>
+              <span class="video-badge">Próximamente</span>
+            </div>
+          </article>
+
+          <!-- Rectángulo 9 -->
+          <article class="video-tarjeta">
+            <div class="video-contenedor" style="display:flex; align-items:center; justify-content:center; background:#181818; color:#777; font-size:.85rem; text-align:center; padding:20px;">
+              <span>Próximamente / Espacio para Video 09</span>
+            </div>
+            <div class="video-info">
+              <h2 class="video-titulo">9. Próximo Estreno</h2>
+              <span class="video-badge">Próximamente</span>
+            </div>
+          </article>
+
+          <!-- Rectángulo 10 -->
+          <article class="video-tarjeta">
+            <div class="video-contenedor" style="display:flex; align-items:center; justify-content:center; background:#181818; color:#777; font-size:.85rem; text-align:center; padding:20px;">
+              <span>Próximamente / Espacio para Video 10</span>
+            </div>
+            <div class="video-info">
+              <h2 class="video-titulo">10. Próximo Estreno</h2>
+              <span class="video-badge">Próximamente</span>
+            </div>
+          </article>
+
+        </div>
+      </section>
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+      <div class="contenedor pie-interior">
+        <div class="pie-marca">
+          <img src="LOGO OFICIAL.png" alt="Logo de Los de Salta">
+          <span>© <span id="anio"></span> Los de Salta · Folklore argentino</span>
+        </div>
+        <a class="volver" href="index.html">Volver a la página principal ↑</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Script para el menú móvil de la barra superior
+    const menuToggle = document.getElementById("menuToggle");
+    const navegacion = document.getElementById("navegacion");
+
+    menuToggle.addEventListener("click", () => {
+      const abierto = navegacion.classList.toggle("abierto");
+      menuToggle.setAttribute("aria-expanded", String(abierto));
+      menuToggle.textContent = abierto ? "Cerrar ✕" : "Menú ☰";
+    });
+
+    navegacion.querySelectorAll("a").forEach((enlace) => {
+      enlace.addEventListener("click", () => {
+        navegacion.classList.remove("abierto");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.textContent = "Menú ☰";
+      });
+    });
+
+    // Actualizar año automáticamente en el footer
+    document.getElementById("anio").textContent = new Date().getFullYear();
+
+    // Lógica para pausar los demás videos cuando uno comienza a reproducirse
+    const todosLosVideos = document.querySelectorAll(".video-reproductor");
+    todosLosVideos.forEach((video) => {
+      video.addEventListener("play", () => {
+        todosLosVideos.forEach((otroVideo) => {
+          if (otroVideo !== video) {
+            otroVideo.pause();
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
